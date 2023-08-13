@@ -16,8 +16,7 @@ public class UpdatePersonUseCase implements UpdatePersonCommand {
     @Override
     public Person execute(Person person, Long id) {
         validateAge(person.getBirthDate());
-        person.setId(id);
-        return personRepository.update(person);
+        return personRepository.update(person, id);
     }
 
 }
