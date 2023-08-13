@@ -20,32 +20,32 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/challenge")
+@RequestMapping("/api/v1/challenge/persons")
 public class PersonController {
     private final CreatePersonCommand createPersonCommand;
     private final GetPersonQuery getPersonQuery;
     private final UpdatePersonCommand updatePersonCommand;
     private final DeletePersonCommand deletePersonCommand;
 
-    @PostMapping("/persons")
+    @PostMapping
     public Person create(@RequestBody PersonBody body) {
         log.debug("Entrando al endpoint: create | uri: /api/v1/challenge/persons | body: {}", body);
         return createPersonCommand.execute(body.toDomain());
     }
 
-    @GetMapping("/persons/{id}")
+    @GetMapping("/{id}")
     public Person get(@PathVariable Long id) {
         log.debug("Entrando al endpoint: get | uri: /api/v1/challenge/persons/{id} | id: {}", id);
         return getPersonQuery.execute(id);
     }
 
-    @PutMapping("/persons/{id}")
+    @PutMapping("/{id}")
     public Person update(@RequestBody PersonBody body, @PathVariable Long id) {
         log.debug("Entrando al endpoint: update | uri: /api/v1/challenge/persons/{id} | body: {} | id: {}", body, id);
         return updatePersonCommand.execute(body.toDomain(), id);
     }
 
-    @DeleteMapping("/persons/{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         log.debug("Entrando al endpoint: delete | uri: /api/v1/challenge/persons/{id} | id: {}", id);
         deletePersonCommand.execute(id);

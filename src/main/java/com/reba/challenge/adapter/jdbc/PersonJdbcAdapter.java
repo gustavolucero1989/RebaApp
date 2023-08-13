@@ -17,6 +17,8 @@ import java.util.Optional;
 public class PersonJdbcAdapter implements PersonRepository {
     private final PersonJpaRepository personJpaRepository;
 
+    private static final String NOT_FOUND = "No se encontró el objeto";
+
     @Override
     public Person create(Person person) {
         log.debug("Entrando al metodo: create | person: {}", person);
@@ -30,17 +32,17 @@ public class PersonJdbcAdapter implements PersonRepository {
     public Person get(Long id) {
         log.debug("Entrando al metodo: get | id: {}", id);
         Optional<PersonJdbcModel> model = personJpaRepository.findById(id);
-        PersonJdbcModel responseModel = model.orElseThrow(() -> new NoSuchElementException("No se encontró el objeto"));
+        PersonJdbcModel responseModel = model.orElseThrow(() -> new NoSuchElementException(NOT_FOUND));
         Person response = PersonJdbcModel.fromDomain(responseModel);
         log.info("Se obtiene del metodo: get | repuesta: {}", response);
         return response;
     }
 
     @Override
-    public Person update(Person person) {
+    public Person update(Person person, Long id) {
         log.debug("Entrando al metodo: update | person: {}", person);
-        Optional<PersonJdbcModel> model = personJpaRepository.findById(person.getId());
-        PersonJdbcModel jdbcModelToUpdate = model.orElseThrow(() -> new NoSuchElementException("No se encontró el objeto"));
+        Optional<PersonJdbcModel> model = personJpaRepository.findById(id);
+        PersonJdbcModel jdbcModelToUpdate = model.orElseThrow(() -> new NoSuchElementException(NOT_FOUND));
         setJdbcToUpdate(jdbcModelToUpdate, person);
         PersonJdbcModel responseModel = personJpaRepository.save(jdbcModelToUpdate);
         Person response = PersonJdbcModel.fromDomain(responseModel);
@@ -53,6 +55,16 @@ public class PersonJdbcAdapter implements PersonRepository {
         log.debug("Entrando al metodo: delete | id: {}", id);
         personJpaRepository.deleteById(id);
         log.info("Se borro con exito la entidad con id: {}", id);
+    }
+
+    @Override
+    public String createRelationship(Long id1, Long id2) {
+        log.debug("Entrando al metodo: createRelationship | id1: {} | id2: {}", id1, id2);
+        Optional<PersonJdbcModel> model = personJpaRepository.findById(id2);
+        PersonJdbcModel jdbcModelToUpdate = model.orElseThrow(() -> new NoSuchElementException(NOT_FOUND));
+        jdbcModelToUpdate.setIdFather(id1);
+        personJpaRepository.save(jdbcModelToUpdate);
+        return id1 + " es padre de " + id2;
     }
 
     private void setJdbcToUpdate(PersonJdbcModel jdbcModelToUpdate, Person person) {

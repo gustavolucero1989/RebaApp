@@ -47,6 +47,8 @@ public class PersonJdbcModel {
     String country;
     @Column(name = "nacionalidad")
     String nationality;
+    @Column(name = "id_padre")
+    Long idFather;
 
     public static PersonJdbcModel toJdbc(Person person) {
         return PersonJdbcModel.builder()
@@ -58,6 +60,7 @@ public class PersonJdbcModel {
             .birthDate(person.getBirthDate())
             .country(person.getCountry())
             .nationality(person.getNationality())
+            .idFather(person.getIdFather())
             .build();
     }
 
@@ -72,6 +75,7 @@ public class PersonJdbcModel {
             .birthDate(personJdbc.getBirthDate())
             .country(personJdbc.getCountry())
             .nationality(personJdbc.getNationality())
+            .idFather(personJdbc.getIdFather())
             .build();
     }
 

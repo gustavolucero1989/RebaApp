@@ -1,11 +1,12 @@
 package com.reba.challenge.domain;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
+import lombok.With;
 
 import java.time.LocalDate;
 
-@Data
+@Value
 @Builder
 public class Person {
     Long id;
@@ -17,4 +18,6 @@ public class Person {
     LocalDate birthDate;
     String country;
     String nationality;
+    @With
+    Long idFather;
 }
