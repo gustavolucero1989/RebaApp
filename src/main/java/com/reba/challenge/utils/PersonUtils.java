@@ -1,4 +1,4 @@
-package com.reba.challenge.adapter.controller.utils;
+package com.reba.challenge.utils;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;

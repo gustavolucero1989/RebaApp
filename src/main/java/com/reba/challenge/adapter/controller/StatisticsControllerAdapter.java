@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/v1/challenge/stats")
 @Slf4j
 @RequiredArgsConstructor
-public class StatisticsController {
+public class StatisticsControllerAdapter {
     private final GetDemographicsQuery getDemographicsQuery;
 
     @GetMapping

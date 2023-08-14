@@ -97,14 +97,15 @@ public class PersonJdbcAdapter implements PersonRepository {
         jdbcModelToUpdate.setIdFather(person.getIdFather());
     }
 
-    public static List<Demography> fromMapList(List<Map<String, Object>> mapList) {
+    private List<Demography> fromMapList(List<Map<String, Object>> mapList) {
         return mapList.stream()
             .map(result -> {
                 String country = (String) result.get(COUNTRY);
                 BigDecimal percentage = (BigDecimal) result.get(PERCENTAGE);
+                Double percentageValue = percentage != null ? percentage.doubleValue() : null;
                 return Demography.builder()
                     .country(country)
-                    .percentage(percentage.doubleValue())
+                    .percentage(percentageValue)
                     .build();
             })
             .collect(Collectors.toList());
