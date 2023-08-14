@@ -23,6 +23,30 @@ public class GetRelationshipUseCase implements GetRelationshipCommand {
         return getRelationship(person1, person2);
     }
 
+    private void validateId(Long id1, Long id2) {
+        if (id1.equals(id2)) {
+            throw new IllegalArgumentException("La persona es la misma.");
+        }
+    }
+
+    private String getRelationship(Person person1, Person person2) {
+
+        if (isBrother(person1, person2)) {
+            return RelationshipType.BROTHER.getDescription();
+        }
+
+        if (isUncle(person1, person2)) {
+            return RelationshipType.UNCLE.getDescription();
+        }
+
+        if (isCousin(person1, person2)) {
+            return RelationshipType.COUSIN.getDescription();
+        }
+
+        return RelationshipType.NONE.getDescription();
+    }
+
+
     private Boolean isBrother(Person person1, Person person2) {
         if (isInvalidFather(person1) || isInvalidFather(person2) || person1.getId().equals(person2.getId()))
             return false;
@@ -44,32 +68,8 @@ public class GetRelationshipUseCase implements GetRelationshipCommand {
         return isBrother(father1, father2);
     }
 
-    private void validateId(Long id1, Long id2) {
-        if (id1.equals(id2)) {
-            throw new IllegalArgumentException("La persona es la misma.");
-        }
-    }
-
     private Boolean isInvalidFather(Person person) {
         return Objects.isNull(person.getIdFather());
     }
-
-    private String getRelationship(Person person1, Person person2) {
-
-        if (isBrother(person1, person2)) {
-            return RelationshipType.BROTHER.getDescription();
-        }
-
-        if (isUncle(person1, person2)) {
-            return RelationshipType.UNCLE.getDescription();
-        }
-
-        if (isCousin(person1, person2)) {
-            return RelationshipType.COUSIN.getDescription();
-        }
-
-        return RelationshipType.NONE.getDescription();
-    }
-
 
 }

@@ -3,13 +3,18 @@ package com.reba.challenge.adapter.jdbc;
 import com.reba.challenge.adapter.jdbc.model.PersonJdbcModel;
 import com.reba.challenge.application.port.out.PersonJpaRepository;
 import com.reba.challenge.application.port.out.PersonRepository;
+import com.reba.challenge.domain.Demography;
 import com.reba.challenge.domain.Person;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -18,6 +23,9 @@ public class PersonJdbcAdapter implements PersonRepository {
     private final PersonJpaRepository personJpaRepository;
 
     private static final String NOT_FOUND = "No se encontró el objeto";
+    private static final String COUNTRY = "country";
+    private static final String PERCENTAGE = "percentage";
+
 
     @Override
     public Person create(Person person) {
@@ -54,7 +62,7 @@ public class PersonJdbcAdapter implements PersonRepository {
     public void delete(Long id) {
         log.debug("Entrando al metodo: delete | id: {}", id);
         personJpaRepository.deleteById(id);
-        log.info("Se borro con exito la entidad con id: {}", id);
+        log.info("Se borro con exito la entidad | id: {}", id);
     }
 
     @Override
@@ -64,7 +72,17 @@ public class PersonJdbcAdapter implements PersonRepository {
         PersonJdbcModel jdbcModelToUpdate = model.orElseThrow(() -> new NoSuchElementException(NOT_FOUND));
         jdbcModelToUpdate.setIdFather(id1);
         personJpaRepository.save(jdbcModelToUpdate);
+        log.info("Se obtiene del metodo: createRelationship | relacion: id1 = {}, id2 = {}", id1, id2);
         return id1 + " es padre de " + id2;
+    }
+
+    @Override
+    public List<Demography> getDemographics() {
+        log.debug("Entrando al metodo: getDemographics");
+        List<Map<String, Object>> results = personJpaRepository.getDemography();
+        List<Demography> demographics = fromMapList(results);
+        log.info("Se obtiene del metodo: getDemographics | size: {}", demographics.size());
+        return demographics;
     }
 
     private void setJdbcToUpdate(PersonJdbcModel jdbcModelToUpdate, Person person) {
@@ -76,5 +94,21 @@ public class PersonJdbcAdapter implements PersonRepository {
         jdbcModelToUpdate.setBirthDate(person.getBirthDate());
         jdbcModelToUpdate.setCountry(person.getCountry());
         jdbcModelToUpdate.setNationality(person.getNationality());
+        jdbcModelToUpdate.setIdFather(person.getIdFather());
     }
+
+    private List<Demography> fromMapList(List<Map<String, Object>> mapList) {
+        return mapList.stream()
+            .map(result -> {
+                String country = (String) result.get(COUNTRY);
+                BigDecimal percentage = (BigDecimal) result.get(PERCENTAGE);
+                Double percentageValue = percentage != null ? percentage.doubleValue() : null;
+                return Demography.builder()
+                    .country(country)
+                    .percentage(percentageValue)
+                    .build();
+            })
+            .collect(Collectors.toList());
+    }
+
 }
