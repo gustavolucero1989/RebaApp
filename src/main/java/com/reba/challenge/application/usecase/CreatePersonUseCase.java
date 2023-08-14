@@ -6,7 +6,7 @@ import com.reba.challenge.domain.Person;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static com.reba.challenge.utils.PersonUtils.validateAge;
+import static com.reba.challenge.adapter.controller.utils.PersonUtils.validateAge;
 
 @Component
 @RequiredArgsConstructor

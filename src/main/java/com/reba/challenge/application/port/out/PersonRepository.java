@@ -1,6 +1,9 @@
 package com.reba.challenge.application.port.out;
 
+import com.reba.challenge.domain.Demography;
 import com.reba.challenge.domain.Person;
+
+import java.util.List;
 
 public interface PersonRepository {
 
@@ -13,5 +16,7 @@ public interface PersonRepository {
     void delete(Long id);
 
     String createRelationship(Long id1, Long id2);
+
+    List<Demography> getDemographics();
 
 }
