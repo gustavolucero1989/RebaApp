@@ -97,21 +97,37 @@ class PersonJdbcAdapterTest {
     }
 
     @Test
-    @DisplayName("Cuando intento eliminar una persona, entonces espero un 200 Ok")
-    void testDeletePerson() {
-        adapter.delete(id1);
+    @DisplayName("Cuando intento borrar una persona existente, entonces espero que se borre")
+    void testDeleteExistingPerson() {
+        Long idToDelete = 3L;
+        when(personJpaRepository.findById(idToDelete)).thenReturn(Optional.of(jdbcModelMock));
 
-        verify(personJpaRepository).deleteById(id1);
+        adapter.delete(idToDelete);
+
+        verify(personJpaRepository).findById(idToDelete);
+        verify(personJpaRepository).deleteById(idToDelete);
+    }
+
+    @Test
+    @DisplayName("Cuando intento borrar una persona inexistente, entonces espero una excepción NoSuchElementException")
+    void testDeleteNonExistingPerson() {
+        when(personJpaRepository.findById(id1)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> adapter.delete(id1));
+
+        verify(personJpaRepository).findById(id1);
     }
 
     @Test
     @DisplayName("Cuando intento crear una relación entre personas, entonces espero un resultado válido")
     void testCreateRelationship() {
+        when(personJpaRepository.findById(id1)).thenReturn(Optional.of(jdbcModelMock));
         when(personJpaRepository.findById(id2)).thenReturn(Optional.of(jdbcModelMock));
         when(personJpaRepository.save(any(PersonJdbcModel.class))).thenReturn(jdbcModelMock);
 
         String result = adapter.createRelationship(id1, id2);
 
+        verify(personJpaRepository).findById(id1);
         verify(personJpaRepository).findById(id2);
         verify(personJpaRepository).save(any(PersonJdbcModel.class));
         assertEquals(id1 + " es padre de " + id2, result);
@@ -120,6 +136,7 @@ class PersonJdbcAdapterTest {
     @Test
     @DisplayName("Cuando intento crear una relación con una persona inexistente, entonces espero una excepción NoSuchElementException")
     void testCreateRelationshipWithNonExistentPerson() {
+        when(personJpaRepository.findById(id1)).thenReturn(Optional.of(jdbcModelMock));
         when(personJpaRepository.findById(nonExistentPersonId)).thenReturn(Optional.empty());
 
         assertThrows(NoSuchElementException.class, () -> adapter.createRelationship(id1, nonExistentPersonId));

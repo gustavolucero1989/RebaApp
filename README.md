@@ -1,92 +1,58 @@
-# RebaApp
+# Reba App
+## _Challenge Reba_
+![](src/main/resources/assets/rebaLogo.png)
+## Autor
+[Gustavo Ezequiel Lucero]
 
+## Tareas
 
+- Nivel 1 : Generar CRUD para el recurso persona
+- Nivel 2-a: Extender la API para crear la relacion de padre entre las personas
+- Nivel 2-b: Disponibilizar un endpoint para obtener la relaciòn "HERMAN@", "TÌ@", "PRIM@"
+- Nivel 3: Disponibilizar un endpoint para obtener la demografìa por cada paìs
+  .
 
-## Getting started
+## Tecnologías
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+- [Java] - Programming language for running cross-platform applications
+- [Spring Boot] - Makes it easy to create stand-alone, production-grade Spring based Applications that you can "just run"
+- [Lombok] - Project Lombok is a java library that automatically plugs into your editor and build tools, spicing up your java.
+- [Maven] - A repository in Maven holds build artifacts and dependencies of varying types.
+- [JUnit] - The goal is to create an up-to-date foundation for developer-side testing on the JVM
+- [Mockito] - A mocking framework that tastes really good. It lets you write beautiful tests with a clean & simple API
+-  [H2] - Is free SQL database written in Java.
+- [Railway] - Is an infrastructure platform where you can provision infrastructure, develop with that infrastructure locally, and then deploy to the cloud.
+- [JMeter] - An application is open source software, a 100% pure Java application designed to load test functional behavior and measure performance
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+La API se encuentra disponible en un [repositorio público][gitlab] en GitLab
 
-## Add your files
+## Documentación
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+### [Swagger][swagger]
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/gustavolucero1989/rebaapp.git
-git branch -M main
-git push -uf origin main
-```
+## Notas
+* Se decidió cambiar las URIs de las consigna de español a inglés para mantener un mismo criterio
+* En el Nivel 2 se decidio cambiar el endpoint de _personas/{id1}/padre/{id2}_ a _relaciones/{id}/padre/{id2}_ para mayor legibilidad de la responsabilidad del endpoint
+* En el endpoint _/relationships/{id1}/{id2}_ la relación es de izquierda a derecha para el caso de TI@, donde id1 es TI@ de id2 pero de forma inversa NO EXISTE RELACIÓN, en el resto de los casos la relación es ambivalente
+* Se hace por defecto un _INSERT_ con 10 registros de personas
+* Para facilitar las pruebas en el insert por defecto existen 3 relaciones
+    * 2 y 3 HERMAN@
+    * 2 Y 4 TI@
+    * 4 y 5 PRIM@
+* La base de datos utilizada es H2 SQL se puede acceder desde [aquí][h2] con la siguiente configuración:
+    * password: sa
 
-## Integrate with your tools
+![](src/main/resources/assets/h2configuration.png)
 
-- [ ] [Set up project integrations](https://gitlab.com/gustavolucero1989/rebaapp/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+[Java]: <https://www.java.com/es/>
+[Spring Boot]: <https://spring.io/projects/spring-boot>
+[Lombok]: <https://projectlombok.org/>
+[Maven]: <https://maven.apache.org/>
+[JUnit]: <https://junit.org/junit5/docs/current/user-guide/>
+[Mockito]: <https://site.mockito.org/>
+[Railway]: <https://railway.app/>
+[JMeter]: <https://jmeter.apache.org/>
+[Gustavo Ezequiel Lucero]: <https://www.linkedin.com/in/gustavo-ezequiel-lucero-2a8250103/>
+[gitlab]: <https://gitlab.com/gustavolucero1989/rebaapp/-/tree/main?ref_type=heads>
+[h2]: <https://www.h2database.com/html/main.html>
+[swagger]: <https://rebaapp-production.up.railway.app/swagger-ui.html>

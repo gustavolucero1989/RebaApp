@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -48,14 +49,14 @@ class PersonControllerAdapterTest {
     }
 
     @Test
-    @DisplayName("Cuando intento crear una persona,entonces espero un 200 OK")
+    @DisplayName("Cuando intento crear una persona,entonces espero un 201")
     void testCreatePerson() {
         when(createPersonCommand.execute(any(Person.class))).thenReturn(personMock);
 
-        Person result = adapter.create(personBodyMock);
+        ResponseEntity<Person> result = adapter.create(personBodyMock);
 
         verify(createPersonCommand).execute(any(Person.class));
-        assertEquals(personMock, result);
+        assertEquals(personMock, result.getBody());
     }
 
     @Test
@@ -63,7 +64,7 @@ class PersonControllerAdapterTest {
     void testGetPerson() {
         when(getPersonQuery.execute(anyLong())).thenReturn(personMock);
 
-        Person result = adapter.get(anyLong());
+        Person result = adapter.getById(anyLong());
 
         verify(getPersonQuery).execute(anyLong());
         assertEquals(personMock, result);
@@ -81,11 +82,11 @@ class PersonControllerAdapterTest {
     }
 
     @Test
-    @DisplayName("Cuando intento eliminar una persona, entonces espero un 200 OK")
+    @DisplayName("Cuando intento eliminar una persona, entonces espero un 204")
     void testDeletePerson() {
         doNothing().when(deletePersonCommand).execute(anyLong());
 
-        adapter.delete(anyLong());
+        adapter.deleteById(anyLong());
 
         verify(deletePersonCommand).execute(anyLong());
     }

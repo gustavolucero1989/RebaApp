@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -35,14 +36,14 @@ class RelationshipControllerAdapterTest {
     }
 
     @Test
-    @DisplayName("Cuando intento crear una relación, entonces espero un 200 OK")
+    @DisplayName("Cuando intento crear una relación, entonces espero un 201")
     void testCreateRelationship() {
         when(createRelationshipCommand.execute(anyLong(), anyLong())).thenReturn(id1 + " es padre de " + id2);
 
-        String result = adapter.create(id1, id2);
+        ResponseEntity<String> result = adapter.create(id1, id2);
 
         verify(createRelationshipCommand).execute(anyLong(), anyLong());
-        assertEquals(id1 + " es padre de " + id2, result);
+        assertEquals(id1 + " es padre de " + id2, result.getBody());
     }
 
     @Test

@@ -43,8 +43,3 @@ class GetDemographicsUseCaseTest {
     }
 }
 
-
-
-
-
-

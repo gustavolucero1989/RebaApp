@@ -7,7 +7,7 @@ public enum RelationshipType {
     BROTHER("HERMAN@"),
     UNCLE("TI@"),
     COUSIN("PRIM@"),
-    NONE("NO HAY RELACION");
+    NONE("NO EXISTE RELACION");
 
     private final String description;
 
