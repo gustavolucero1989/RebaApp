@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -25,6 +24,7 @@ public class PersonJdbcAdapter implements PersonRepository {
     private static final String NOT_FOUND = "No se encontró el objeto";
     private static final String COUNTRY = "country";
     private static final String PERCENTAGE = "percentage";
+    private static final String IS_FATHER_OF = " es padre de ";
 
 
     @Override
@@ -39,8 +39,8 @@ public class PersonJdbcAdapter implements PersonRepository {
     @Override
     public Person get(Long id) {
         log.debug("Entrando al metodo: get | id: {}", id);
-        Optional<PersonJdbcModel> model = personJpaRepository.findById(id);
-        PersonJdbcModel responseModel = model.orElseThrow(() -> new NoSuchElementException(NOT_FOUND));
+        PersonJdbcModel responseModel = personJpaRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException(NOT_FOUND));
         Person response = PersonJdbcModel.fromDomain(responseModel);
         log.info("Se obtiene del metodo: get | repuesta: {}", response);
         return response;
@@ -49,8 +49,8 @@ public class PersonJdbcAdapter implements PersonRepository {
     @Override
     public Person update(Person person, Long id) {
         log.debug("Entrando al metodo: update | person: {}", person);
-        Optional<PersonJdbcModel> model = personJpaRepository.findById(id);
-        PersonJdbcModel jdbcModelToUpdate = model.orElseThrow(() -> new NoSuchElementException(NOT_FOUND));
+        PersonJdbcModel jdbcModelToUpdate = personJpaRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException(NOT_FOUND));
         setJdbcToUpdate(jdbcModelToUpdate, person);
         PersonJdbcModel responseModel = personJpaRepository.save(jdbcModelToUpdate);
         Person response = PersonJdbcModel.fromDomain(responseModel);
@@ -61,19 +61,23 @@ public class PersonJdbcAdapter implements PersonRepository {
     @Override
     public void delete(Long id) {
         log.debug("Entrando al metodo: delete | id: {}", id);
-        personJpaRepository.deleteById(id);
+        PersonJdbcModel jdbcModelToDelete = personJpaRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException(NOT_FOUND));
+        personJpaRepository.deleteById(jdbcModelToDelete.getId());
         log.info("Se borro con exito la entidad | id: {}", id);
     }
 
     @Override
     public String createRelationship(Long id1, Long id2) {
         log.debug("Entrando al metodo: createRelationship | id1: {} | id2: {}", id1, id2);
-        Optional<PersonJdbcModel> model = personJpaRepository.findById(id2);
-        PersonJdbcModel jdbcModelToUpdate = model.orElseThrow(() -> new NoSuchElementException(NOT_FOUND));
-        jdbcModelToUpdate.setIdFather(id1);
+        PersonJdbcModel jdbcModelFather = personJpaRepository.findById(id1)
+            .orElseThrow(() -> new NoSuchElementException(NOT_FOUND));
+        PersonJdbcModel jdbcModelToUpdate = personJpaRepository.findById(id2)
+            .orElseThrow(() -> new NoSuchElementException(NOT_FOUND));
+        jdbcModelToUpdate.setIdFather(jdbcModelFather.getId());
         personJpaRepository.save(jdbcModelToUpdate);
         log.info("Se obtiene del metodo: createRelationship | relacion: id1 = {}, id2 = {}", id1, id2);
-        return id1 + " es padre de " + id2;
+        return id1 + IS_FATHER_OF + id2;
     }
 
     @Override
