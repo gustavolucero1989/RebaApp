@@ -6,13 +6,13 @@ import io.swagger.v3.oas.annotations.servers.Server;
 
 @OpenAPIDefinition(
     info = @Info(
-        title = "OpenAPI definition",
-        version = "v0"
+        title = "Reba App",
+        version = "v1"
     ),
     servers = {
         @Server(
             url = "https://rebaapp-production.up.railway.app",
-            description = "Generated server url"
+            description = "challenge"
         )
     }
 )
